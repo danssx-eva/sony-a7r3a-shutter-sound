@@ -1,0 +1,50 @@
+# 安装：pip install -r requirements.txt
+# 在 Python 3.11.16 / 3.14.5 上安装通过；下面是最低版本，不是锁死的版本。
+#
+# 分三组：
+#   A 必需 —— 不装就连 tools/ 下大部分脚本都跑不起来
+#   B 相机操作 —— 只有要连真相机时才需要（含 Sony-PMCA-RE 自己的依赖）
+#   C 可选 —— 处理音效、或做更深的分析时才需要
+
+# ---------- A 必需 ----------
+
+# 反汇编（静态分析、载荷自检）
+capstone>=5.0
+
+# 汇编（生成载荷）
+keystone-engine>=0.9
+
+# CPU 仿真（载荷离线自检，不需要相机）
+unicorn>=2.0
+
+# ELF 解析
+pyelftools>=0.29
+
+# ---------- B 相机操作 ----------
+# vendor/Sony-PMCA-RE/ 是原样副本，它的 imports 不会随本仓库的清单自动安装，
+# 所以这里显式列出来。只做离线分析可以整组跳过。
+
+pyusb>=1.2
+libusb-package>=1.0
+
+# PMCA 运行时真正会 import 的
+asn1crypto
+axmlparserpy==0.0.4
+certifi
+pycryptodomex
+pyyaml
+tlslite-ng
+pycparser==2.17
+
+# Windows 专用（comtypes / pywin32 / pyinstaller 只做打包时用，不装也能跑命令行）
+comtypes; sys_platform == "win32"
+pywin32; sys_platform == "win32"
+
+# ---------- C 可选 ----------
+
+# 音频处理（examples/convert_audio.py 本身只用标准库，这几个是给自定义处理链用的）
+# numpy
+# scipy
+
+# 检查环境用的
+# 无
